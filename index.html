@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daraz Play Income Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            background: #1e293b;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            max-height: 750px;
+        }
+        .header {
+            background: #f97316;
+            padding: 20px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        .header h1 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: white;
+        }
+        .balance-card {
+            background: #0f172a;
+            margin: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+        .balance-card h2 {
+            font-size: 28px;
+            color: #4ade80;
+            margin-top: 5px;
+        }
+        .content {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #f97316;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            margin-bottom: 10px;
+            transition: 0.2s;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .btn-success {
+            background: #22c55e;
+        }
+        .nav-bar {
+            display: flex;
+            background: #0f172a;
+            border-top: 1px solid #334155;
+        }
+        .nav-item {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .nav-item.active {
+            color: #f97316;
+            font-weight: bold;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: white;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎮 দারাজ প্লে ইনকাম সেন্টার</h1>
+            <p style="font-size: 13px; color: #fff;">ভিডিও ও গেম খেলে ইনকাম করুন</p>
+        </div>
+
+        <!-- Balance Section -->
+        <div class="balance-card">
+            <p>আপনার মূল ব্যালেন্স</p>
+            <h2>৳ <span id="balance">10.00</span></h2>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="content">
+            <!-- Home / Watch Section -->
+            <div id="home-section" class="section active">
+                <h3 style="margin-bottom: 15px;">ভিডিও টাস্ক</h3>
+                <p style="font-size: 14px; color: #94a3b8; margin-bottom: 15px;">নিচের বাটনটিতে ক্লিক করে ভিডিও দেখুন এবং ব্যালেন্স যোগ করুন।</p>
+                <button class="btn btn-success" id="watch-btn" onclick="watchVideo()">▶ ভিডিও দেখুন (বোনাস পান)</button>
+                <p id="timer-text" style="text-align: center; margin-top: 10px; color: #facc15;"></p>
+            </div>
+
+            <!-- Withdraw Section -->
+            <div id="withdraw-section" class="section">
+                <h3 style="margin-bottom: 15px;">টাকা উত্তোলন (Withdraw)</h3>
+                <label>পেমেন্ট মেথড:</label>
+                <select id="method">
+                    <option value="bKash">বিকাশ (bKash)</option>
+                    <option value="Nagad">নগদ (Nagad)</option>
+                </select>
+                <label>একাউন্ট নম্বর:</label>
+                <input type="text" id="account" placeholder="017xxxxxxxx">
+                <label>টাকার পরিমাণ:</label>
+                <input type="number" id="amount" placeholder="সর্বনিম্ন ৫০ টাকা">
+                <button class="btn" onclick="requestWithdraw()">উত্তোলন রিকোয়েস্ট পাঠান</button>
+            </div>
+
+            <!-- Profile Section -->
+            <div id="profile-section" class="section">
+                <h3 style="margin-bottom: 15px;">আপনার অ্যাকাউন্ট</h3>
+                <p style="color: #94a3b8;">রেফারেল লিংক:</p>
+                <input type="text" value="https://t.me/DarazPlayBot?start=ref123" readonly>
+                <button class="btn" onclick="alert('রেফারেল লিংক কপি করা হয়েছে!')">লিংক কপি করুন</button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="nav-bar">
+            <div class="nav-item active" onclick="switchTab('home', this)">হোম</div>
+            <div class="nav-item" onclick="switchTab('withdraw', this)">উইথড্র</div>
+            <div class="nav-item" onclick="switchTab('profile', this)">প্রোফাইল</div>
+        </div>
+    </div>
+
+    <script>
+        let userBalance = 10.00;
+        document.getElementById('balance').innerText = userBalance.toFixed(2);
+
+        function switchTab(tabName, element) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            
+            document.getElementById(tabName + '-section').classList.add('active');
+            element.classList.add('active');
+        }
+
+        function watchVideo() {
+            let btn = document.getElementById('watch-btn');
+            let timerText = document.getElementById('timer-text');
+            btn.disabled = true;
+            let countdown = 5;
+
+            timerText.innerText = `ভিডিও লোড হচ্ছে... ${countdown} সেকেন্ড অপেক্ষা করুন`;
+            
+            let interval = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    timerText.innerText = `দয়া করে অপেক্ষা করুন... ${countdown} সেকেন্ড`;
+                } else {
+                    clearInterval(interval);
+                    userBalance += 2.50;
+                    document.getElementById('balance').innerText = userBalance.toFixed(2);
+                    timerText.innerText = "অভিনন্দন! আপনি ২.৫০ টাকা পেয়েছেন।";
+                    btn.disabled = false;
+                }
+            }, 1000);
+        }
+
+        function requestWithdraw() {
+            let acc = document.getElementById('account').value;
+            let amt = document.getElementById('amount').value;
+            if(acc === "" || amt === "") {
+                alert("দয়া করে সঠিক তথ্য দিন!");
+            } else {
+                alert("আপনার উইথড্র রিকোয়েস্ট সফলভাবে জমা হয়েছে!");
+                document.getElementById('account').value = "";
+                document.getElementById('amount').value = "";
+            }
+        }
+    </script>
+</body>
+</html>
